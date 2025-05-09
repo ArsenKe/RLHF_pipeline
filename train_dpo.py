@@ -10,14 +10,30 @@ from trl import DPOConfig, DPOTrainer
 from peft import PeftModel
 from huggingface_hub import HfApi
 
-# Parse arguments
-parser = argparse.ArgumentParser()
-parser.add_argument("--base_model", type=str, required=True, help="Base model name (e.g., google/mt5-large)")
-parser.add_argument("--feedback_data", type=str, required=True, help="Firebase Realtime Database URL for feedback data")
-args = parser.parse_args()
+# # Parse arguments
+# parser = argparse.ArgumentParser()
+# parser.add_argument("--base_model", type=str, required=True, help="Base model name (e.g., google/mt5-large)")
+# parser.add_argument("--feedback_data", type=str, required=True, help="Firebase Realtime Database URL for feedback data")
+# args = parser.parse_args()
 
-BASE_MODEL = args.base_model
-FIREBASE_DB_URL = args.feedback_data
+# BASE_MODEL = args.base_model
+# FIREBASE_DB_URL = args.feedback_data
+
+# At the top of your script, remove argparse imports:
+# import argparse
+
+# Instead, read from os.environ:
+BASE_MODEL = os.environ.get("BASE_MODEL")
+if not BASE_MODEL:
+    raise RuntimeError("BASE_MODEL environment variable is required")
+
+FIREBASE_DB_URL = os.environ.get("FIREBASE_DB_URL")
+if not FIREBASE_DB_URL:
+    raise RuntimeError("FIREBASE_DB_URL environment variable is required")
+
+
+
+
 
 # DPO hyperparameters
 DPO_OUTPUT_DIR = os.environ.get("DPO_OUTPUT_DIR", "dpo_out")
